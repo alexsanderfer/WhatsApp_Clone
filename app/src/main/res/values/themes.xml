@@ -1,9 +1,23 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<!--
+  ~ Copyright (c) 2024. Created by Alexsander Fernandes at 2/22. All rights reserved.
+  ~ GitHub: https://github.com/alexsanderfer/
+  ~ Portfolio: https://alexsanderfer.netlify.app/
+  -->
+
+<resources>
     <!-- Base application theme. -->
     <style name="Base.Theme.WhatsAppClone" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/my_primary</item>
+        <item name="actionOverflowButtonStyle">@style/ActionOverflow</item>
+    </style>
 
+    <style name="ActionOverflow" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="tint">@color/white</item>
+    </style>
+
+    <style name="ShapeProfilePlaceholder">
+        <item name="cornerSize">50%</item>
     </style>
 
     <style name="Theme.WhatsAppClone" parent="Base.Theme.WhatsAppClone" />
