@@ -108,7 +108,7 @@ class ProfileActivity() : AppCompatActivity(), ImageSelectedListener {
             .document(idLoggedUser)
             .update(data)
             .addOnSuccessListener {
-                displayToastMessage(getString(R.string.sucess_updating_profile))
+                displayToastMessage(getString(R.string.success_updating_profile))
             }
             .addOnFailureListener {
                 displayToastMessage(getString(R.string.error_updating_profile))

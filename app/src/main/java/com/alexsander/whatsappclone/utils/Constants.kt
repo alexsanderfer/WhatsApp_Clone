@@ -9,4 +9,5 @@ package com.alexsander.whatsappclone.utils
 object Constants {
     const val ORIGIN_CONTACT = "origin_contact"
     const val ORIGIN_CHAT = "origin_chat"
+    const val DB_COLLECTION_MESSAGES = "messages"
 }

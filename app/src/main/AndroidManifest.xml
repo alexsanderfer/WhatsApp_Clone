@@ -22,6 +22,7 @@
         tools:targetApi="31">
         <activity
             android:name=".activities.MessagesActivity"
+            android:parentActivityName=".activities.MainActivity"
             android:exported="false" />
         <activity
             android:name=".ui.login.profile.ProfileActivity"
