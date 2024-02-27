@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Created by Alexsander Fernandes at 2/24. All rights reserved.
+ * Copyright (c) 2024. Created by Alexsander Fernandes at 2/27. All rights reserved.
  * GitHub: https://github.com/alexsanderfer/
  * Portfolio: https://alexsanderfer.netlify.app/
  */
@@ -8,7 +8,6 @@ package com.alexsander.whatsappclone.activities
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.alexsander.whatsappclone.R
 import com.alexsander.whatsappclone.databinding.ActivityMessagesBinding
@@ -65,9 +64,7 @@ class MessagesActivity : AppCompatActivity() {
                         val message = it.toObject(Message::class.java)
                         if (message != null) {
                             listMessage.add(message)
-                            Log.i("listener", "initializeListeners: ${message.message}")
                         }
-
                     }
 
                     if (listMessage.isNotEmpty()) {

@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2024. Created by Alexsander Fernandes at 2/22. All rights reserved.
+  ~ Copyright (c) 2024. Created by Alexsander Fernandes at 2/27. All rights reserved.
   ~ GitHub: https://github.com/alexsanderfer/
   ~ Portfolio: https://alexsanderfer.netlify.app/
   -->
@@ -43,5 +43,6 @@
     <string name="message_placeholder">Mensagem</string>
     <string name="error_sending_message">Erro ao enviar a mensagem.</string>
     <string name="error_get_messages">Erro ao recuperar as mensagens.</string>
+    <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "</string>
 
 </resources>
