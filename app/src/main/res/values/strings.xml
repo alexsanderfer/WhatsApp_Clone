@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright (c) 2024. Created by Alexsander Fernandes at 2/27. All rights reserved.
+  ~ Copyright (c) 2024. Created by Alexsander Fernandes at 2/28. All rights reserved.
   ~ GitHub: https://github.com/alexsanderfer/
   ~ Portfolio: https://alexsanderfer.netlify.app/
   -->
@@ -44,5 +44,10 @@
     <string name="error_sending_message">Erro ao enviar a mensagem.</string>
     <string name="error_get_messages">Erro ao recuperar as mensagens.</string>
     <string name="lorem_ipsum">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. "</string>
+    <string name="erro_saving_chat">Erro ao salvar a conversa.</string>
+    <string name="error_retrieving_conversations">Erro ao recuperar as conversas.</string>
+    <string name="john_doe">John Doe</string>
+    <string name="last_message">Última mensagem</string>
+    <string name="photo_profile">Photo profile</string>
 
 </resources>

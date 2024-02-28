@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Created by Alexsander Fernandes at 2/27. All rights reserved.
+ * Copyright (c) 2024. Created by Alexsander Fernandes at 2/28. All rights reserved.
  * GitHub: https://github.com/alexsanderfer/
  * Portfolio: https://alexsanderfer.netlify.app/
  */
@@ -27,8 +27,9 @@ class MessagesAdapter : Adapter<ViewHolder>() {
         private val binding: ItemMessageSenderBinding
     ) : ViewHolder(binding.root) {
         fun bind(message: Message) {
-
+            binding.textMessageSender.text = message.message
         }
+
         companion object {
             fun layoutInflater(parent: ViewGroup): MessagesSenderViewHolder {
                 val inflater = LayoutInflater.from(parent.context)
@@ -41,9 +42,10 @@ class MessagesAdapter : Adapter<ViewHolder>() {
     class MessageRecipientViewHolder(
         private val binding: ItemMessageRecipientBinding
     ) : ViewHolder(binding.root) {
-        fun bin(message: Message){
-
+        fun bin(message: Message) {
+            binding.textMessageRecipient.text = message.message
         }
+
         companion object {
             fun layoutInflater(parent: ViewGroup): MessageRecipientViewHolder {
                 val inflater = LayoutInflater.from(parent.context)

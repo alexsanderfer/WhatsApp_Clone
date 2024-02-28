@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Created by Alexsander Fernandes at 2/27. All rights reserved.
+ * Copyright (c) 2024. Created by Alexsander Fernandes at 2/28. All rights reserved.
  * GitHub: https://github.com/alexsanderfer/
  * Portfolio: https://alexsanderfer.netlify.app/
  */
@@ -9,11 +9,14 @@ package com.alexsander.whatsappclone.activities
 import android.os.Build
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.alexsander.whatsappclone.R
 import com.alexsander.whatsappclone.databinding.ActivityMessagesBinding
+import com.alexsander.whatsappclone.model.Chats
 import com.alexsander.whatsappclone.model.Message
 import com.alexsander.whatsappclone.model.User
 import com.alexsander.whatsappclone.utils.Constants
+import com.alexsander.whatsappclone.utils.adapters.MessagesAdapter
 import com.alexsander.whatsappclone.utils.displayToastMessage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -26,17 +29,27 @@ class MessagesActivity : AppCompatActivity() {
     private val firestore by lazy { FirebaseFirestore.getInstance() }
     private val auth by lazy { FirebaseAuth.getInstance() }
     private lateinit var listenerRegistration: ListenerRegistration
+    private lateinit var messagesAdapter: MessagesAdapter
     private var recipientData: User? = null
     private var originData: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        recoverRecipientUserData()
+        recoverUserData()
         initializeToolbar()
         initializeClickEvents()
+        initializeRecyclerView()
         initializeListeners()
 
+    }
+
+    private fun initializeRecyclerView() {
+        with(binding) {
+            messagesAdapter = MessagesAdapter()
+            recyclerViewMessages.adapter = messagesAdapter
+            recyclerViewMessages.layoutManager = LinearLayoutManager(applicationContext)
+        }
     }
 
     override fun onDestroy() {
@@ -68,7 +81,7 @@ class MessagesActivity : AppCompatActivity() {
                     }
 
                     if (listMessage.isNotEmpty()) {
-                        // TODO adapter
+                        messagesAdapter.addList(listMessage)
                     }
                 }
 
@@ -92,10 +105,34 @@ class MessagesActivity : AppCompatActivity() {
                 val userMessage = Message(idUserSender, textMessage)
                 saveMessageOnFirestore(idUserSender, idUserRecipient, userMessage) // This method saves the message for the sender.
                 saveMessageOnFirestore(idUserRecipient, idUserSender, userMessage) // This method saves the message for the recipient.
+
+                val chatSender = Chats(
+                    idUserSender, idUserRecipient, recipientData!!.photoProfile, recipientData!!.name, textMessage
+                )
+                saveChatOnFirestore(chatSender)
+
+                val chatRecipient = Chats(
+                    idUserRecipient, idUserSender, originData!!.photoProfile, originData!!.name, textMessage
+                )
+
+                saveChatOnFirestore(chatRecipient)
+
                 binding.messageText.setText("")
             }
         }
     }
+
+    private fun saveChatOnFirestore(chat: Chats) {
+        firestore.collection(Constants.DB_COLLECTION_CHATS)
+            .document(chat.idUserSender)
+            .collection(Constants.LAST_CHATS)
+            .document(chat.idUserRecipient)
+            .set(chat)
+            .addOnFailureListener {
+                displayToastMessage(getString(R.string.erro_saving_chat))
+            }
+    }
+
 
     private fun saveMessageOnFirestore(idUserSender: String, idUserRecipient: String, userMessage: Message) {
         firestore.collection(Constants.DB_COLLECTION_MESSAGES)
@@ -107,31 +144,27 @@ class MessagesActivity : AppCompatActivity() {
             }
     }
 
-    private fun recoverRecipientUserData() {
+    private fun recoverUserData() {
+        auth.currentUser?.uid?.let {
+            firestore.collection(Constants.DB_COLLECTION_USERS)
+                .document(it)
+                .get()
+                .addOnSuccessListener { documentSnapshot ->
+                    val user = documentSnapshot.toObject(User::class.java)
+                    if (user != null) {
+                        originData = user
+                    }
+                }
+        }
+
         val extras = intent.extras ?: throw RuntimeException("Intent extras are null")
-        val origin = extras.getString("originData") ?: throw RuntimeException("originData not found in extras")
+        //val origin = extras.getString("originData") ?: throw RuntimeException("originData not found in extras")
 
-        when (origin) {
-            Constants.ORIGIN_CONTACT -> {
-                recipientData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    extras.getParcelable("recipientData", User::class.java) ?: throw RuntimeException("Failed to retrieve recipient data as User")
-                } else {
-                    extras.getParcelable("recipientData") ?: throw RuntimeException("Failed to retrieve recipient data")
-                }
-            }
-
-            Constants.ORIGIN_CHAT -> {
-                // Implement data recovery logic for chats here
-                // Store the retrieved data in originData
-                originData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                    extras.getParcelable("originData", User::class.java) ?: throw RuntimeException("Failed to retrieve origin data as User")
-                } else {
-                    extras.getParcelable("originData") ?: throw RuntimeException("Failed to retrieve origin data")
-                }
-            }
-
-            else -> {
-                throw RuntimeException("Invalid origin data: $origin")
+        if (extras != null) {
+            recipientData = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                extras.getParcelable("recipientData", User::class.java) ?: throw RuntimeException("Failed to retrieve recipient data as User")
+            } else {
+                extras.getParcelable("recipientData") ?: throw RuntimeException("Failed to retrieve recipient data")
             }
         }
     }

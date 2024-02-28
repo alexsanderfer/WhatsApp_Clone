@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Created by Alexsander Fernandes at 2/23. All rights reserved.
+ * Copyright (c) 2024. Created by Alexsander Fernandes at 2/28. All rights reserved.
  * GitHub: https://github.com/alexsanderfer/
  * Portfolio: https://alexsanderfer.netlify.app/
  */
@@ -22,6 +22,7 @@ import com.alexsander.whatsappclone.utils.adapters.ContactsAdapter
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.Query
 
 class ContactsFragment : Fragment() {
     private lateinit var binding: FragmentContactsBinding
@@ -37,8 +38,8 @@ class ContactsFragment : Fragment() {
         binding = FragmentContactsBinding.inflate(
             inflater, container, false
         )
-        contactsAdapter = ContactsAdapter{
-            val intent =Intent(context, MessagesActivity::class.java)
+        contactsAdapter = ContactsAdapter {
+            val intent = Intent(context, MessagesActivity::class.java)
             intent.putExtra("recipientData", it) // It's who receive the messages datas
             intent.putExtra("originData", Constants.ORIGIN_CONTACT) // Origin of the messages datas
             startActivity(intent)
@@ -61,7 +62,8 @@ class ContactsFragment : Fragment() {
 
         eventSnapshot = firestore
             .collection("users")
-            .addSnapshotListener { value, error ->
+            .orderBy("date", Query.Direction.DESCENDING)
+            .addSnapshotListener { value, _ ->
                 val userList = mutableListOf<User>()
                 val document = value?.documents
                 document?.forEach {

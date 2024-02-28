@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2024. Created by Alexsander Fernandes at 2/22. All rights reserved.
+ * Copyright (c) 2024. Created by Alexsander Fernandes at 2/28. All rights reserved.
  * GitHub: https://github.com/alexsanderfer/
  * Portfolio: https://alexsanderfer.netlify.app/
  */
@@ -17,3 +17,4 @@ fun Activity.displayToastMessage(text: String) {
 fun DialogFragment.displayToastMessage(text: String) {
     requireActivity().displayToastMessage(text)
 }
+
